@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>GIS ID Token test</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+      // Replace with your actual Client ID:
+      const CLIENT_ID =
+        "812448263301-a2lpffgig4ot2ai7ajm0s5qlsfsumvqi.apps.googleusercontent.com";
+
+      window.onGoogleCredential = async ({ credential }) => {
+        console.log("ID_TOKEN:", credential);
+        // Send the ID token to the backend API:
+        const resp = await fetch(
+          "http://localhost:3000/api/v1/auth/oauth/google/idtoken",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id_token: credential }),
+          }
+        );
+        console.log("API response:", await resp.json());
+      };
+
+      window.onload = () => {
+        google.accounts.id.initialize({
+          client_id: CLIENT_ID,
+          callback: onGoogleCredential,
+        });
+        // Button:
+        google.accounts.id.renderButton(document.getElementById("btn"), {
+          theme: "outline",
+          size: "large",
+        });
+        // One Tap (optional):
+        // google.accounts.id.prompt();
+      };
+    </script>
+  </head>
+  <body>
+    <div id="btn"></div>
+  </body>
+</html>
