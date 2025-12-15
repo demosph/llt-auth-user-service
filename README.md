@@ -28,7 +28,7 @@ Implements **JWT (access/refresh), session rotation, Google Identity Services (G
 
 `http://localhost:3000/api/v1`
 
-Swagger UI: `http://localhost:3000/api/docs`
+Swagger UI: `http://localhost:3000/auth/docs`
 
 Note: Server is mounted at `/api/v1`
 
@@ -37,7 +37,7 @@ Note: Server is mounted at `/api/v1`
 `docker compose up --build`
 
 - Service: http://localhost:3000
-- Swagger: http://localhost:3000/api/docs
+- Swagger: http://localhost:3000/auth/docs
 - Postgres container for this service is included in `docker-compose.yml`.
 
 ## Local dev (without Docker)

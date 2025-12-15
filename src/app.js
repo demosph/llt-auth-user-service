@@ -13,12 +13,12 @@ export function createApp() {
   app.use(morgan("dev"));
 
   const swaggerDoc = buildSwagger();
-  app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
+  app.use("/auth/docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
   app.use("/api/v1/auth", authRoutes);
   app.use("/api/v1/users", userRoutes);
 
-  app.get("/health", (_req, res) => res.json({ ok: true }));
+  app.get("/auth/health", (_req, res) => res.json({ ok: true }));
 
   app.use((err, _req, res, next) => {
     if (err instanceof SyntaxError && "body" in err) {
