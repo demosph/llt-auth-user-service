@@ -13,13 +13,15 @@ services:
     env_file:
       - .env
     volumes:
-      - ./volumes/postgres-db:/var/lib/postgresql/data
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - llt-net
 
-  auth-api:
-    container_name: auth-api
+  auth-service:
+    container_name: auth-service
     restart: always
     ports:
-      - 3000:3000
+      - 3001:3001
     build:
       context: .
       dockerfile: Dockerfile
@@ -28,5 +30,13 @@ services:
     depends_on:
       auth-postgres:
         condition: service_healthy
-    volumes:
-      - ./volumes/auth-api/static/:/app/public/:rw
+    networks:
+      - llt-net
+
+networks:
+  llt-net:
+    external: true
+    name: llt-net
+
+volumes:
+  pg_data:
