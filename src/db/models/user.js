@@ -2,7 +2,7 @@ import { DataTypes, UUIDV4 } from "sequelize";
 import { sequelize } from "../index.js";
 
 const DEFAULT_AVATAR_URL =
-  process.env.DEFAULT_AVATAR_URL || "/src/assets/img/default-avatar.jpg";
+  process.env.DEFAULT_AVATAR_URL || "/static/avatars/default-avatar.png";
 
 export const User = sequelize.define(
   "User",

@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
+import path from "path";
 import swaggerUi from "swagger-ui-express";
 import { buildSwagger } from "./config/swagger.js";
 import authRoutes from "./routes/authRoutes.js";
@@ -17,6 +18,7 @@ export function createApp() {
 
   app.use("/api/v1/auth", authRoutes);
   app.use("/api/v1/users", userRoutes);
+  app.use("/static", express.static(path.resolve(process.cwd(), "public")));
 
   app.get("/auth/health", (_req, res) => res.json({ ok: true }));
 
