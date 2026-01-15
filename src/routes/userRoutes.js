@@ -14,6 +14,7 @@ r.get("/me", requireAuth, async (req, res) => {
     email: user.email,
     name: user.name,
     avatar_url: user.avatar_url,
+    plan: user.plan,
     auth_provider: user.auth_provider,
   });
 });
@@ -26,12 +27,30 @@ r.patch("/me", requireAuth, validate(patchMeSchema), async (req, res) => {
     email: user.email,
     name: user.name,
     avatar_url: user.avatar_url,
+    plan: user.plan,
   });
 });
 
 r.get("/me/preferences", requireAuth, async (req, res) => {
   const prefs = await UserPreference.findByPk(req.user.id);
-  res.json(prefs || {});
+
+  if (!prefs) {
+    // Return defaults (aligned with model defaults)
+    return res.json({
+      theme: "system",
+      language: "en",
+      notifications_enabled: false,
+      notification_channels: ["email"],
+      interests: [],
+      transport_modes: [],
+    });
+  }
+
+  const p = prefs.toJSON();
+  // optionally hide user_id from response
+  delete p.user_id;
+
+  res.json(p);
 });
 
 r.put(
@@ -43,7 +62,11 @@ r.put(
       user_id: req.user.id,
       ...req.body,
     });
-    res.json(prefs);
+
+    const p = prefs.toJSON();
+    delete p.user_id;
+
+    res.json(p);
   }
 );
 

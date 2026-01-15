@@ -6,12 +6,39 @@ export const UserPreference = sequelize.define(
   "UserPreference",
   {
     user_id: { type: DataTypes.UUID, primaryKey: true },
+
     home_city: { type: DataTypes.STRING },
     home_lat: { type: DataTypes.DECIMAL(9, 6) },
     home_lng: { type: DataTypes.DECIMAL(9, 6) },
-    interests: { type: DataTypes.JSONB },
-    transport_modes: { type: DataTypes.JSONB },
+    interests: { type: DataTypes.JSONB, allowNull: false, defaultValue: [] },
+    transport_modes: {
+      type: DataTypes.JSONB,
+      allowNull: false,
+      defaultValue: [],
+    },
     avg_daily_budget: { type: DataTypes.INTEGER },
+
+    theme: {
+      type: DataTypes.ENUM("light", "dark", "system"),
+      allowNull: false,
+      defaultValue: "system",
+    },
+    language: {
+      type: DataTypes.STRING, // en, uk, en-US, uk-UA...
+      allowNull: false,
+      defaultValue: "en",
+    },
+
+    notifications_enabled: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
+    notification_channels: {
+      type: DataTypes.JSONB, // ["email", "push", "sms"]
+      allowNull: false,
+      defaultValue: ["email"],
+    },
   },
   {
     tableName: "user_preferences",
