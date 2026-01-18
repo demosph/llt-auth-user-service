@@ -76,7 +76,7 @@ await sequelize.sync({ alter: true });
 - `GET /users/me` - current user profile
 - `PATCH /users/me` - update name/avatar
 - `GET /users/me/preferences` - get preferences
-- `PUT /users/me/preferences` - upsert preferences
+- `PATCH /users/me/preferences` - upsert preferences
 
 ## GIS (Google Identity Services) - testing without a frontend
 

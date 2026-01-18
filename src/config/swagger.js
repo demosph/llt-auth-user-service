@@ -5,7 +5,7 @@ import {
   refreshSchema,
   oauthGoogleIdTokenSchema,
 } from "../schemas/authSchemas.js";
-import { patchMeSchema, putPrefsSchema } from "../schemas/userSchemas.js";
+import { patchMeSchema, patchPrefsSchema } from "../schemas/userSchemas.js";
 
 export function buildSwagger() {
   const { swagger: Register } = j2s(registerSchema.extract("body"));
@@ -13,7 +13,7 @@ export function buildSwagger() {
   const { swagger: Refresh } = j2s(refreshSchema.extract("body"));
   const { swagger: GISIdToken } = j2s(oauthGoogleIdTokenSchema.extract("body"));
   const { swagger: PatchMe } = j2s(patchMeSchema.extract("body"));
-  const { swagger: PutPrefs } = j2s(putPrefsSchema.extract("body"));
+  const { swagger: PatchPrefs } = j2s(patchPrefsSchema.extract("body"));
 
   return {
     openapi: "3.0.0",
@@ -68,9 +68,9 @@ export function buildSwagger() {
           security: [bearer()],
           responses: { 200: { description: "OK" } },
         },
-        put: {
+        patch: {
           security: [bearer()],
-          requestBody: body(PutPrefs),
+          requestBody: body(PatchPrefs),
           responses: { 200: { description: "OK" } },
         },
       },

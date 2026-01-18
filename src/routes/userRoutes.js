@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { requireAuth } from "../middleware/auth.js";
 import { validate } from "../middleware/validate.js";
-import { patchMeSchema, putPrefsSchema } from "../schemas/userSchemas.js";
+import { patchMeSchema, patchPrefsSchema } from "../schemas/userSchemas.js";
 import { User } from "../db/models/user.js";
 import { UserPreference } from "../db/models/userPreference.js";
 
@@ -53,21 +53,46 @@ r.get("/me/preferences", requireAuth, async (req, res) => {
   res.json(p);
 });
 
-r.put(
+r.patch(
   "/me/preferences",
   requireAuth,
-  validate(putPrefsSchema),
+  validate(patchPrefsSchema),
   async (req, res) => {
-    const [prefs] = await UserPreference.upsert({
-      user_id: req.user.id,
-      ...req.body,
-    });
+    let prefs = await UserPreference.findByPk(req.user.id);
+
+    const defaults = {
+      theme: "system",
+      language: "en",
+      notifications_enabled: true,
+      notification_channels: ["email"],
+      interests: [],
+      transport_modes: [],
+      home_city: null,
+      home_lat: null,
+      home_lng: null,
+      avg_daily_budget: null,
+    };
+
+    if (!prefs) {
+      prefs = await UserPreference.create({
+        user_id: req.user.id,
+        ...defaults,
+      });
+    }
+
+    const patch = { ...req.body };
+
+    // if notifications_enabled=false — clear notification_channels
+    if (patch.notifications_enabled === false) {
+      patch.notification_channels = [];
+    }
+
+    await prefs.update(patch);
 
     const p = prefs.toJSON();
     delete p.user_id;
-
     res.json(p);
-  }
+  },
 );
 
 export default r;

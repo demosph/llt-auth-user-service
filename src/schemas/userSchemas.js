@@ -8,25 +8,32 @@ export const patchMeSchema = Joi.object({
   }).min(1),
 });
 
-export const putPrefsSchema = Joi.object({
+export const patchPrefsSchema = Joi.object({
   body: Joi.object({
     home_city: Joi.string().allow("", null),
     home_lat: Joi.number().precision(6).allow(null),
     home_lng: Joi.number().precision(6).allow(null),
-    interests: Joi.array().items(Joi.string()).default([]),
-    transport_modes: Joi.array()
-      .items(Joi.string().valid("car", "public", "bike", "walk"))
-      .default([]),
+    interests: Joi.array().items(Joi.string()),
+    transport_modes: Joi.array().items(
+      Joi.string().valid("car", "public", "bike", "walk"),
+    ),
     avg_daily_budget: Joi.number().integer().min(0).allow(null),
 
-    theme: Joi.string().valid("light", "dark", "system").default("system"),
-    language: Joi.string()
-      .pattern(/^[a-z]{2}(-[A-Z]{2})?$/) // en | uk | en-US | uk-UA
-      .default("en"),
+    theme: Joi.string()
+      .valid("light", "dark", "system")
+      .default("system")
+      .example("system"),
 
-    notifications_enabled: Joi.boolean().default(true),
+    language: Joi.string()
+      .pattern(/^[a-z]{2}(-[A-Z]{2})?$/)
+      .default("en")
+      .example("en"),
+
+    notifications_enabled: Joi.boolean().default(true).example(true),
+
     notification_channels: Joi.array()
       .items(Joi.string().valid("email", "push", "sms"))
-      .default(["email"]),
-  }),
+      .default(["email"])
+      .example(["email"]),
+  }).min(1),
 });
