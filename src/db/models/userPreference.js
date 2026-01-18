@@ -18,6 +18,12 @@ export const UserPreference = sequelize.define(
     },
     avg_daily_budget: { type: DataTypes.INTEGER },
 
+    currency: {
+      type: DataTypes.STRING(3),
+      allowNull: false,
+      defaultValue: "UAH",
+    },
+
     theme: {
       type: DataTypes.ENUM("light", "dark", "system"),
       allowNull: false,
@@ -43,7 +49,7 @@ export const UserPreference = sequelize.define(
   {
     tableName: "user_preferences",
     timestamps: false,
-  }
+  },
 );
 
 User.hasOne(UserPreference, { foreignKey: "user_id" });

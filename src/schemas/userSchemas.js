@@ -29,6 +29,11 @@ export const patchPrefsSchema = Joi.object({
       .default("en")
       .example("en"),
 
+    currency: Joi.string()
+      .valid("USD", "EUR", "UAH")
+      .default("UAH")
+      .example("UAH"),
+
     notifications_enabled: Joi.boolean().default(true).example(true),
 
     notification_channels: Joi.array()

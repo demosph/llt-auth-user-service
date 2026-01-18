@@ -71,6 +71,7 @@ r.patch(
       home_lat: null,
       home_lng: null,
       avg_daily_budget: null,
+      currency: "USD",
     };
 
     if (!prefs) {
